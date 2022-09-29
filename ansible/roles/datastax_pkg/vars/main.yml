@@ -1,0 +1,3 @@
+### Datastax repository file name
+#
+dse_repo_file: /etc/apt/sources.list.d/datastax.sources.list
