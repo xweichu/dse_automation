@@ -15,3 +15,5 @@ In addition, an **Ubuntu 20.04** ova template is required to configure the DSE c
 
 ## Instructions
 Customize the deploy.cfg file in this repo and run the command `bash ./deploy.sh` to start the automation. 
+
+**Please note the \*.sh files in this repo are based on bash, simply run `./*.sh` or `sh ./*.sh` won't work.**
