@@ -9,7 +9,7 @@ The following dependencies are required to run this tool:
 - Ansible
 - sshpass
 
-If above packages are not installed on your system, you can clone this repo and run the command to install: `bash ./env_prep.sh`. 
+If above packages are not installed on your system, you can clone this repo and run the command to install on Ubuntu: `bash ./env_prep.sh`. 
 
 In addition, an **Ubuntu 20.04** ova template is required to configure the DSE cluster. Make sure the template is accessible via ssh with username and password. Other Ubuntu versions may or may not work.
 
