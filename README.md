@@ -21,6 +21,6 @@ This tool uses the [Ubuntu Cloud Images (ova)](https://cloud-images.ubuntu.com/)
 
  - Run the command `bash ./deploy.sh` to start the automation. 
  
- - Run the command `bash ./cleanup` to cleanup the deployment.
+ - Run the command `bash ./cleanup` to destroy and cleanup the deployment when errors occur.
 
 **Please note the \*.sh files in this repo are based on bash, simply run `./*.sh` or `sh ./*.sh` won't work. Use `bash ./*.sh` instead.**
