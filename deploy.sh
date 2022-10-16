@@ -84,6 +84,6 @@ if [ ${#sshkey} -gt 0 ]; then
   ansible-playbook -i ./hosts dse_install.yml
 else
   cd ../ansible/
-  ansible-playbook -i ./hosts dse_install.yml -u $username -e "ansible_password=$pssword_plain" -e "ansible_become_pass=$password"
+  ansible-playbook -i ./hosts dse_install.yml -u $username -e "ansible_password=$pssword_plain" -e "ansible_become_pass=$pssword_plain"
 fi;
 
