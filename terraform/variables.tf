@@ -45,28 +45,28 @@ variable vm_firmware {
   default = "bios"
 }
 
-variable vsphere_network1 {
-  description = "network1 name"
-  type = string
+variable "networks" {
+  type = list(object({
+    name = string
+    ovf_mapping = string
+  }))
 }
 
-variable vsphere_network2 {
-  description = "network2 name"
-  type = string
+variable "ips" {
+  type = list(list(object({
+      ipv4_address = string
+      ipv4_netmask = string
+    })))
 }
+
 
 variable content_library {
   description = "content library name"
   type = string
 }
 
-variable vsphere_ubuntu_template_url {
-  description = "ubuntu template url"
-  type = string
-}
-
-variable vm_domain_name {
-  description = "Domain name"
+variable template_url {
+  description = "template url"
   type = string
 }
 
@@ -94,7 +94,7 @@ variable disk_size {
 }
 
 variable vsphere_vm_name_prefix {
-  description = "vm name prefix"
+  description = "vm name prefix which appears in vSphere"
   type = string
 }
 
@@ -103,29 +103,25 @@ variable ipv4_gateway {
   type = string
 }
 
-variable network1_ips{
-  description = "ips from network1"
-  type = list(string)
-}
-
-variable network1_mask{
-  description = "netmask for network1"
-  type = number
-}
-
-variable network2_ips{
-  description = "ips from network2"
-  type = list(string)
-}
-
-variable network2_mask{
-  description = "netmask for network2"
-  type = number
-}
-
-variable dns_servers{
-  description = "DNS server ip addresses"
+variable dns_servers {
+  description = "DNS ip list"
   type = list(string)
 }
 
 
+variable username {
+  description = "username for linux system"
+  type = string
+}
+
+variable pswd {
+  description = "plain text password for linux system"
+  type = string
+  default = ""
+}
+
+variable ssh_authorized_key {
+  description = "public key for ssh"
+  type = string
+  default = ""
+}

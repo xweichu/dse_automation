@@ -1,93 +1,89 @@
 #!/usr/bin/env bash
 
-input="./deploy.cfg"
+echo "moving terraform configuration file"
+cp ./config/a_Terraform.tfvars ./terraform/terraform.tfvars
 
-file="./terraform/terraform.tfvars"
-flag=false
+echo "generating asnsible configuration files"
+input="./config/b_Cassandra.cfg"
+
+hosts="./ansible/hosts"
+all="./ansible/group_vars/all"
+
+echo "# host file" > $hosts
+flag=true
+
 while IFS= read -r line
 do
-  if [ "$line" = "### TERRAFORM_CONFIG START ###" ]; then 
-    echo $line > $file 
-    flag=true
+  if [ "$line" = "### dse configurations [don't edit this comment line]" ]; then 
+    echo "# all file" > $all
+    flag=false
     continue
   fi;
   if [ "$flag" = true ]; then
-    echo $line >> $file
-  fi;
-  if [ "$line" = "### TERRAFORM_CONFIG END ###" ]; then 
-    flag=false
-    break
+    echo $line >> $hosts
+  else
+    echo $line >> $all
   fi;
 done < "$input"
 
-file="./ansible/hosts"
-flag=false
-while IFS= read -r line
-do
-  if [ "$line" = "### DSE_INVENTORY START ###" ]; then 
-    echo $line > $file 
-    flag=true
-    continue
-  fi;
-  if [ "$flag" = true ]; then
-    echo $line >> $file
-  fi;
-  if [ "$line" = "### DSE_INVENTORY END ###" ]; then 
-    flag=false
-    break
-  fi;
-done < "$input"
+echo dse_ver_target:  \"{{ dse_ver_major }}.{{ dse_ver_minor }}\" >> $all
+echo data_file_directories: \"{{ dse_data_homedir }}/cassandra\" >> $all
+echo commitlog_directory: \"{{ dse_data_homedir }}/commitlog\" >> $all
+echo saved_caches_directory: \"{{ dse_data_homedir }}/saved_cahces\" >> $all
+echo hints_directory: \"{{ dse_data_homedir }}/hints\" >> $all
+echo cdc_raw_directory: \"{{ dse_data_homedir }}/cdc_raw\" >> $all
+echo metadata_directory: \"{{ dse_data_homedir }}/metadata\" >> $all
 
+echo "generating cloud_init.yml and parsing user credentials..."
+input="./terraform/terraform.tfvars"
+IFS='\"'
 
-file="./ansible/group_vars/all"
-flag=false
-while IFS= read -r line
-do
-  if [ "$line" = "### CASSANDRA_CONFIG START ###" ]; then 
-    echo "---" > $file
-    echo $line >> $file 
-    flag=true
-    continue
-  fi;
-  if [ "$flag" = true ]; then
-    echo $line >> $file
-  fi;
-  if [ "$line" = "### CASSANDRA_CONFIG END ###" ]; then 
-    flag=false
-    break
-  fi;
-done < "$input"
+username=$(cat "$input" | grep ^username | tail -1)
+read -ra array <<< "$username"
+username="${array[@]: -1:1}"
 
-echo dse_ver_target:  \"{{ dse_ver_major }}.{{ dse_ver_minor }}\" >> $file
-echo data_file_directories: \"{{ dse_data_homedir }}/cassandra\" >> $file
-echo commitlog_directory: \"{{ dse_data_homedir }}/commitlog\" >> $file
-echo saved_caches_directory: \"{{ dse_data_homedir }}/saved_cahces\" >> $file
-echo hints_directory: \"{{ dse_data_homedir }}/hints\" >> $file
-echo cdc_raw_directory: \"{{ dse_data_homedir }}/cdc_raw\" >> $file
-echo metadata_directory: \"{{ dse_data_homedir }}/metadata\" >> $file
-
-
-user=$(cat "$input" | grep ubuntu_root_user)
-password=$(cat "$input" | grep ubuntu_root_password)
-
-array=($user)
-user="${array[@]: -1:1}"
-
-array=($password)
+password=$(cat "$input" | grep ^pswd | tail -1)
+read -ra array <<< "$password"
 password="${array[@]: -1:1}"
+pssword_plain=$password
 
-echo "Settings populated to Terraform and Ansible..."
-echo "Creating VMs..."
+sshkey=$(cat "$input" | grep ^ssh_authorized_key | tail -1)
+read -ra array <<< "$sshkey"
+sshkey="${array[@]: -1:1}"
+
+output="./terraform/cloud_init.yml"
+echo "#cloud-config" > $output
+echo "users:" >> $output
+echo "  - name: $username" >> $output
+echo "    shell: /bin/bash" >> $output
+echo "    sudo: ['ALL=(ALL) NOPASSWD:ALL']" >> $output
+echo "    groups: sudo, users, admin" >> $output
+if [ ${#sshkey} -gt 0 ]; then
+  echo "    ssh_authorized_keys:" >> $output
+  echo "      - $sshkey" >> $output
+fi;
+echo "ssh_pwauth: True" >> $output
+if [ ${#password} -gt 0 ]; then
+  password=$(mkpasswd --method=SHA-512 --rounds=4096 $password)
+  echo "chpasswd:" >> $output
+  echo "  list: |" >> $output
+  echo "    $username:$password" >> $output
+  echo "  expire: false" >> $output
+fi;
+echo "hostname: linuxserver" >> $output
 
 cd ./terraform
 terraform init
-terraform apply -auto-approve
+terraform apply -auto-approve 
+echo "sleeping for 120s ..."
+sleep 240
 
-echo "VMs are created sucessfully..."
-echo "Waiting 120s..."
-sleep 120
 
-cd ../ansible/
-ansible-playbook -i ./hosts dse_install.yml -u $user -e "ansible_password=$password" -e "ansible_become_pass=$password"
+if [ ${#sshkey} -gt 0 ]; then
+  cd ../ansible/
+  ansible-playbook -i ./hosts dse_install.yml
+else
+  cd ../ansible/
+  ansible-playbook -i ./hosts dse_install.yml -u $username -e "ansible_password=$pssword_plain" -e "ansible_become_pass=$password"
+fi;
 
-echo "Done!"

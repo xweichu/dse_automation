@@ -35,3 +35,6 @@ sudo apt-get install -y ansible
 
 # Install sshpass 
 sudo apt-get install -y sshpass
+
+# Install whois 
+sudo apt-get install -y whois
