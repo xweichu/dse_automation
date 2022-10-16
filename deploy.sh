@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 echo "moving terraform configuration file"
-cp ./config/a_Terraform.tfvars ./terraform/terraform.tfvars
+cp ./config/a_terraform.tfvars ./terraform/terraform.tfvars
 
 echo "generating asnsible configuration files"
-input="./config/b_Cassandra.cfg"
+input="./config/b_cassandra.cfg"
 
 hosts="./ansible/hosts"
 all="./ansible/group_vars/all"
