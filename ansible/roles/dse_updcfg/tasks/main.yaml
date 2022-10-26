@@ -99,7 +99,7 @@
     - { regexp: 'cluster_name\:', line: "cluster_name: '{{ cluster_name }}'" }
     - { regexp: '- seeds\:', line: '          - seeds: "{{ seeds }}"' }
     - { regexp: 'endpoint_snitch\:', line: "endpoint_snitch: GossipingPropertyFileSnitch" }
-    - { regexp: '^listen_address\:', line: "listen_address: {{ private_ip }}" }
+    - { regexp: '^listen_address\:', line: "listen_address: {{ ansible_default_ipv4.address }}" }
     - { regexp: '^commitlog_directory\:', line: 'commitlog_directory: {{ commitlog_directory }}' }
     - { regexp: '^saved_caches_directory\:', line: 'saved_caches_directory: {{ saved_caches_directory }}' }
     - { regexp: '^hints_directory\:', line: 'hints_directory: {{ hints_directory }}' }

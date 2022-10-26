@@ -43,6 +43,29 @@
     - { role: dse_instbin }
     - { role: dse_updcfg }
 
+# Configure JVM options
+- hosts: dse
+  any_errors_fatal: true
+  become: true
+  become_method: sudo
+  tasks:
+    - name: remove last line
+      lineinfile:
+          path: /etc/dse/cassandra/jvm-server.options
+          regexp: "# The newline in the end of file is intentional" 
+          state: absent
+    - name: Add JVM options
+      lineinfile:
+        path: /etc/dse/cassandra/jvm-server.options
+        line: "{{ item }}"
+      with_items:
+      - '# Additional JVM options from des-automation tool'
+      - '-XX:+UseG1GC'
+      - '-XX:G1RSetUpdatingPauseTimePercent=5'
+      - '-XX:MaxGCPauseMillis=300'
+      - '-XX:InitiatingHeapOccupancyPercent=70 -Xms31G -Xmx31G'
+    - name: Add new line and comments
+      shell: printf '\n# The newline in the end of file is intentional' >> /etc/dse/cassandra/jvm-server.options
 
 # Start DSE seed nodes 
 - hosts: dse

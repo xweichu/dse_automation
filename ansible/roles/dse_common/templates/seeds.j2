@@ -1,7 +1,7 @@
 {% set seeds = [] %}
 {% for node in play_hosts %}
 {% if hostvars[node].seed == "true" %}
-{% set ignored = seeds.append( hostvars[node].private_ip ) %}
+{% set ignored = seeds.append( hostvars[node].ansible_default_ipv4.address ) %}
 {% endif %}
 {% endfor %}
 {{ seeds | join(',') }}

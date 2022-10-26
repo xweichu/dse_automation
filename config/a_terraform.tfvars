@@ -29,14 +29,25 @@ mem_size = 32768
 # disk size in GB
 disk_size = 256
 
-# Example using two network interfaces per vm, one uses public ip and the other uses private ip
-networks = [{name="wdc-vds01-vm-c", ovf_mapping="eth0"}, {name="wdc-vds01-vm-b", ovf_mapping="eth1"}]
+# Example using one network interfaces per vm
+networks = [{name="wdc-vds01-vm-c", ovf_mapping="eth0"}]
 ips = [
-  # ips for vm_1, 172.16.22.155 is for wdc-vds01-vm-b, and 172.16.20.155 is for wdc-vds01-vm-b
-  [{ipv4_address="172.16.22.155",ipv4_netmask="23"}, {ipv4_address="172.16.20.155",ipv4_netmask="23"}],
-  # ips for vm_2, 172.16.22.156 is for wdc-vds01-vm-b, and 172.16.20.156 is for wdc-vds01-vm-b
-  [{ipv4_address="172.16.22.156",ipv4_netmask="23"}, {ipv4_address="172.16.20.156",ipv4_netmask="23"}]
+  # ips for vm_1, 172.16.22.155 is for wdc-vds01-vm-c
+  [{ipv4_address="172.16.22.155",ipv4_netmask="23"}],
+  # ips for vm_2, 172.16.22.156 is for wdc-vds01-vm-c
+  [{ipv4_address="172.16.22.156",ipv4_netmask="23"}]
 ]
+
+
+# Example using two network interfaces per vm, one uses public ip and the other uses private ip
+# networks = [{name="wdc-vds01-vm-c", ovf_mapping="eth0"}, {name="wdc-vds01-vm-b", ovf_mapping="eth1"}]
+# ips = [
+  # ips for vm_1, 172.16.22.155 is for wdc-vds01-vm-c, and 172.16.20.155 is for wdc-vds01-vm-b
+#  [{ipv4_address="172.16.22.155",ipv4_netmask="23"}, {ipv4_address="172.16.20.155",ipv4_netmask="23"}],
+  # ips for vm_2, 172.16.22.156 is for wdc-vds01-vm-c, and 172.16.20.156 is for wdc-vds01-vm-b
+#  [{ipv4_address="172.16.22.156",ipv4_netmask="23"}, {ipv4_address="172.16.20.156",ipv4_netmask="23"}]
+# ]
+
 
 ipv4_gateway = "172.16.23.253"
 dns_servers = ["172.16.16.16","172.16.16.17"]
