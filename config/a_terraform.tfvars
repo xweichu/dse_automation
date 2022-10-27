@@ -22,20 +22,20 @@ template_url = "https://cloud-images.ubuntu.com/focal/current/focal-server-cloud
 
 ## vm configurations
 vsphere_vm_name_prefix = "cloud"
-num_of_vms = 2
+num_of_vms = 4
 num_cpus = 16
 # memory size in MB.
-mem_size = 32768
+mem_size = 65536
 # disk size in GB
 disk_size = 256
 
 # Example using one network interfaces per vm
 networks = [{name="wdc-vds01-vm-c", ovf_mapping="eth0"}]
 ips = [
-  # ips for vm_1, 172.16.22.155 is for wdc-vds01-vm-c
-  [{ipv4_address="172.16.22.155",ipv4_netmask="23"}],
-  # ips for vm_2, 172.16.22.156 is for wdc-vds01-vm-c
-  [{ipv4_address="172.16.22.156",ipv4_netmask="23"}]
+  [{ipv4_address="172.16.22.152",ipv4_netmask="23"}],
+  [{ipv4_address="172.16.22.153",ipv4_netmask="23"}],
+  [{ipv4_address="172.16.22.154",ipv4_netmask="23"}],
+  [{ipv4_address="172.16.22.155",ipv4_netmask="23"}]
 ]
 
 
