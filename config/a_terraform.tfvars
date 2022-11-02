@@ -5,6 +5,8 @@ vcenter_password = "P@ssword123!"
 vsphere_datacenter = "Datacenter"
 vsphere_compute_cluster ="Cluster"
 vsphere_datastore_name = "vsanDatastore"
+
+# Terraform will create a new resrouce pool/content lib, make sure the name doesn't conflict with existing ones.
 vsphere_resource_pool_name = "cloud_init"
 content_library = "cloud_init_lib"
 
@@ -29,8 +31,8 @@ mem_size = 65536
 
 # 3 disks need to be configured, configure disk size in GB
 system_disk_size = 256
-data_disk_size = 256
-log_disk_size = 256
+data_disk_size = 512
+log_disk_size = 128
 
 
 # Example using one network interfaces per vm
