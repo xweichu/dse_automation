@@ -87,11 +87,24 @@ variable mem_size {
   default = 8192
 }
 
-variable disk_size {
+variable system_disk_size {
   description = "Size of disk in GiB"
   type = number
-  default = 100
+  default = 256
 }
+
+variable data_disk_size {
+  description = "Size of disk in GiB"
+  type = number
+  default = 256
+}
+
+variable log_disk_size {
+  description = "Size of disk in GiB"
+  type = number
+  default = 256
+}
+
 
 variable vsphere_vm_name_prefix {
   description = "vm name prefix which appears in vSphere"

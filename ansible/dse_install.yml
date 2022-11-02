@@ -28,6 +28,30 @@
       name: python
       state: present
 
+  - name: Create xfs filesytems on sdb
+    filesystem:
+      fstype: xfs
+      dev: /dev/sdb
+
+  - name: Create xfs filesytems on sdc
+    filesystem:
+      fstype: xfs
+      dev: /dev/sdc
+
+  - name: Mount sdb to dse_data dir
+    ansible.posix.mount:
+      path: /opt/dse_data
+      src: /dev/sdb
+      fstype: xfs
+      state: mounted
+
+  - name: Mount sdc to cassandra log dir
+    ansible.posix.mount:
+      path: /var/log/cassandra
+      src: /dev/sdc
+      fstype: xfs
+      state: mounted
+
 
   roles:
   - { role: datastax_pkg }

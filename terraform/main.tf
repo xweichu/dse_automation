@@ -57,8 +57,22 @@ resource "vsphere_virtual_machine" "my_vms" {
   memory = var.mem_size
   disk {
     label = "disk0"
-    size = var.disk_size
+    unit_number = 0
+    size = var.system_disk_size
   }
+
+ disk {
+    label = "disk1"
+    unit_number = 1
+    size = var.data_disk_size
+  }
+  disk {
+    label = "disk2"
+    unit_number = 2
+    size = var.log_disk_size
+  }
+
+
   firmware = var.vm_firmware
   dynamic "network_interface" {
     for_each = data.vsphere_network.network

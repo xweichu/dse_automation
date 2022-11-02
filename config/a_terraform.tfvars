@@ -26,8 +26,12 @@ num_of_vms = 4
 num_cpus = 16
 # memory size in MB.
 mem_size = 65536
-# disk size in GB
-disk_size = 256
+
+# 3 disks need to be configured, configure disk size in GB
+system_disk_size = 256
+data_disk_size = 256
+log_disk_size = 256
+
 
 # Example using one network interfaces per vm
 networks = [{name="wdc-vds01-vm-c", ovf_mapping="eth0"}]

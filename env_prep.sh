@@ -38,3 +38,6 @@ sudo apt-get install -y sshpass
 
 # Install whois 
 sudo apt-get install -y whois
+
+# Install Ansible Lib
+ansible-galaxy collection install ansible.posix 
