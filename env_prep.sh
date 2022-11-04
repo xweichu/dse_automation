@@ -20,6 +20,9 @@ wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/
 # Verify the key's fingerprint.
 echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
 
+sudo apt install software-properties-common
+sudo apt-add-repository ppa:ansible/ansible
+
 # Install Terraform
 sudo apt-get update
 sudo apt-get install -y terraform
